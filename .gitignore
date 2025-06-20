@@ -6,3 +6,9 @@ node_modules/
 
 #LINTER
 biome.json
+
+#Drizzle
+drizzle/
+
+#DB
+*.sqlite

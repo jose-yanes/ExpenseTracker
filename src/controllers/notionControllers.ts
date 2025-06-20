@@ -1,4 +1,5 @@
 import { Notion } from "../services/notion/";
+import { addIfNotExists } from "../db/queries/notionDB";
 
 export const syncDBController = async (
   expenseID: string,
@@ -12,7 +13,16 @@ export const syncDBController = async (
   for (let i = 0; i < expenseChildrens.length; i++) {
     // ASUMO que hay la misma cantidad de expenses que de incomes ya que deberia haber
     // una por cada mes trackeado.
-    console.log(await Notion.getChildrenTitle(expenseChildrens[i], apiToken));
-    console.log(await Notion.getChildrenTitle(incomeChildrens[i], apiToken));
+    const expenseDb = await Notion.getChildrenTitle(
+      expenseChildrens[i],
+      apiToken,
+    );
+    const incomeDb = await Notion.getChildrenTitle(
+      incomeChildrens[i],
+      apiToken,
+    );
+
+    addIfNotExists(expenseDb?.id, expenseDb?.title, "expense");
+    addIfNotExists(incomeDb?.id, incomeDb?.title, "income");
   }
 };

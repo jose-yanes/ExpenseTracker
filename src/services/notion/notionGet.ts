@@ -43,7 +43,8 @@ export const getChildrenTitle = async (
   const resJson = await res.json();
   if (resJson.type === "child_database") {
     return {
-      [databaseID]: resJson.child_database.title,
+      id: databaseID,
+      title: resJson.child_database.title,
     };
   }
 };
