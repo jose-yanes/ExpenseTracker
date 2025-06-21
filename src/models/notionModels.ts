@@ -3,6 +3,13 @@ export interface Column {
   name: string;
 }
 
+export interface ColumnSelect extends Column {
+  type: "select" | "multi_select";
+  options: string[];
+}
+
+export type AnyColumn = Column | ColumnSelect;
+
 type ColumnType =
   | "date"
   | "multi_select"

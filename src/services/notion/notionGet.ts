@@ -1,4 +1,4 @@
-import { Column } from "../../models/notionModels";
+import { AnyColumn } from "../../models/notionModels";
 
 const Headers = {
   Authorization: `Bearer ${process.env.NOTION_API}`,
@@ -54,24 +54,31 @@ export const getChildrenTitle = async (databaseID: string) => {
 
 export const getColumnInfo = async (
   childrenId: string,
-): Promise<Array<Column>> => {
+): Promise<Array<AnyColumn>> => {
   const url = `https://api.notion.com/v1/databases/${childrenId}`;
   const res = await fetch(url, {
     headers: Headers,
   });
   const resJson = await res.json();
 
-  const columnArr: Array<Column> = [];
+  const columnArr: Array<AnyColumn> = [];
   for (const key in resJson.properties) {
-    const column: Column = {
-      type: resJson.properties[key].type,
-      name: resJson.properties[key].name,
-    };
-
+    const property = resJson.properties[key];
+    let column: AnyColumn;
+    if (property.type === "select" || property.type === "multi_select") {
+      column = {
+        type: property.type,
+        name: property.name,
+        options: property[property.type].options,
+      };
+    } else {
+      column = {
+        type: property.type,
+        name: property.name,
+      };
+    }
     columnArr.push(column);
   }
-
-  console.log(columnArr);
 
   return columnArr;
 };
