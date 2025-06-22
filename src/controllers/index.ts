@@ -1,9 +1,6 @@
-import {
-  syncDBController,
-  syncChildrenColumnsController,
-} from "./notionControllers";
+import { syncDBController, saveMappingController } from "./notionControllers";
 
 export const Controller = {
   syncDBController,
-  syncChildrenColumnsController,
+  saveMappingController,
 };

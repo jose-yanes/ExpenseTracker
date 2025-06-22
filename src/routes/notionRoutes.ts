@@ -3,9 +3,6 @@ import { Hono } from "hono";
 const notionRoutes = new Hono();
 
 notionRoutes.get("/sync_db", Controller.syncDBController);
+notionRoutes.post("send_map", Controller.saveMappingController);
 
-notionRoutes.get(
-  "/sync_columns/:childrenId",
-  Controller.syncChildrenColumnsController,
-);
 export default notionRoutes;

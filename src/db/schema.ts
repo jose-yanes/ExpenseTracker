@@ -23,7 +23,7 @@ export const columnMappingTable = sqliteTable("column_mapping", {
   databaseId: text("database_id")
     .notNull()
     .references(() => databasesTable.id),
-  completed: int({ mode: "boolean" }),
+  completed: int({ mode: "boolean" }).default(false),
   userColumns: text("user_columns", { mode: "json" }),
 });
 
