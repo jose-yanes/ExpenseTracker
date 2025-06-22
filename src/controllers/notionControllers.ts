@@ -1,7 +1,12 @@
 import { Notion } from "../services/notion/";
 import { addIfNotExists } from "../db/queries/notionDB";
-import { addMappingIfNotExists, addUserColumns } from "../db/queries/mappingDB";
+import {
+  addMappingIfNotExists,
+  addUserColumns,
+  addUserMapping,
+} from "../db/queries/mappingDB";
 import { Context } from "hono";
+import { columnmappingSchema } from "../models/mappingSchema";
 
 const EXPENSE_DB = process.env.EXPENSE_DB;
 const INCOME_DB = process.env.INCOME_DB;
@@ -35,8 +40,25 @@ export const syncDBController = async (c: Context) => {
 };
 
 export const saveMappingController = async (c: Context) => {
+  const databaseId = c.req.param("databaseId");
   const body = await c.req.json();
-  console.log(body);
+  const result = columnmappingSchema.safeParse(body);
+  console.log(result);
+  if (!result.success) {
+    return c.json(
+      {
+        error: "Invalid Mapping",
+        details: result.error.format(),
+      },
+      400,
+    );
+  }
+
+  const mapping = result.data;
+  addUserMapping(databaseId, mapping);
+  return c.json({
+    ok: true,
+  });
 };
 
 // export const syncChildrenColumnsController = async (c: Context) => {

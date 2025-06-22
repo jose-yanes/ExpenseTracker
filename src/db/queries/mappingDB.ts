@@ -2,6 +2,7 @@ import { db } from "../client";
 import { columnMappingTable } from "../schema";
 import { eq } from "drizzle-orm";
 import { AnyColumn } from "../../models/notionModels";
+import { ColumnMapping } from "../../models/mappingSchema";
 
 export const addMappingIfNotExists = async (
   userId: number,
@@ -20,6 +21,7 @@ export const addMappingIfNotExists = async (
     });
   }
 };
+
 export const addUserColumns = async (
   databaseId: string,
   userColumns: AnyColumn[],
@@ -28,6 +30,19 @@ export const addUserColumns = async (
     .update(columnMappingTable)
     .set({
       userColumns,
+    })
+    .where(eq(columnMappingTable.databaseId, databaseId));
+};
+
+export const addUserMapping = async (
+  databaseId: string,
+  mapping: ColumnMapping,
+) => {
+  await db
+    .update(columnMappingTable)
+    .set({
+      mapping,
+      completed: true,
     })
     .where(eq(columnMappingTable.databaseId, databaseId));
 };
