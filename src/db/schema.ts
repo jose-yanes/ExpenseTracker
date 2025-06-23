@@ -32,8 +32,9 @@ export const expensesTable = sqliteTable("expenses", {
   databaseId: text("database_id")
     .notNull()
     .references(() => databasesTable.id),
+  lastEdited: text("last_edited"),
   title: text("title").notNull(),
-  date: int({ mode: "timestamp" }),
+  date: text("date"),
   amount: int().notNull(),
   category: text().notNull(),
   details: text(),

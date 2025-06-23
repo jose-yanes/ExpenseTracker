@@ -85,7 +85,6 @@ export const getColumnInfo = async (
 
 export const getRowsInfo = async (databaseId: string): Promise<Array<Row>> => {
   const url = `https://api.notion.com/v1/databases/${databaseId}/query`;
-  console.log(`Url: ${url}`);
   const res = await fetch(url, {
     method: "POST",
     headers: Headers,

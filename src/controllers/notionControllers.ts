@@ -1,10 +1,12 @@
 import { Notion } from "../services/notion/";
+import { Map } from "../services/mapping";
 import { addIfNotExists } from "../db/queries/notionDB";
 import {
   addMappingIfNotExists,
   addUserColumns,
   addUserMapping,
 } from "../db/queries/mappingDB";
+import { addExpense } from "../db/queries/expenses";
 import { Context } from "hono";
 import { columnmappingSchema } from "../models/mappingSchema";
 
@@ -64,9 +66,10 @@ export const saveMappingController = async (c: Context) => {
 export const getRowsInfoController = async (c: Context) => {
   const databaseId = c.req.param("databaseId");
   const rowsInfo = await Notion.getRowsInfo(databaseId);
-  //TODO: Call the function services/mapping/map to map the response from Notion
-  //to the expected schema
-  //Then save the returned values to the database
+  const mappedRows = await Map.getMappedRows(databaseId, rowsInfo);
+  for (let i = 0; i < mappedRows.length; i++) {
+    addExpense(mappedRows[i], databaseId);
+  }
   return c.json({
     rows: rowsInfo,
   });

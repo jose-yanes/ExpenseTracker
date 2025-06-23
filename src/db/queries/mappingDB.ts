@@ -46,3 +46,13 @@ export const addUserMapping = async (
     })
     .where(eq(columnMappingTable.databaseId, databaseId));
 };
+
+export const getUserMapping = (databaseId: string) => {
+  return db
+    .select({
+      mapping: columnMappingTable.mapping,
+    })
+    .from(columnMappingTable)
+    .where(eq(columnMappingTable.databaseId, databaseId))
+    .get();
+};
