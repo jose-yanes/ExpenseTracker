@@ -61,12 +61,13 @@ export const saveMappingController = async (c: Context) => {
   });
 };
 
-// export const syncChildrenColumnsController = async (c: Context) => {
-//   const childrenId = c.req.param("childrenId");
-//   const columnsRetrieved = await Notion.getColumnInfo(childrenId);
-//   addUserColumns(childrenId, columnsRetrieved);
-//   c.status(200);
-//   return c.json({
-//     msg: columnsRetrieved,
-//   });
-// };
+export const getRowsInfoController = async (c: Context) => {
+  const databaseId = c.req.param("databaseId");
+  const rowsInfo = await Notion.getRowsInfo(databaseId);
+  //TODO: Call the function services/mapping/map to map the response from Notion
+  //to the expected schema
+  //Then save the returned values to the database
+  return c.json({
+    rows: rowsInfo,
+  });
+};
